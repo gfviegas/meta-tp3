@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  meta_tp3:
+    build: .
+    image: meta_tp3
+    container_name: meta_tp3
+    volumes:
+      - ./:/code

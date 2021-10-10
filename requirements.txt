@@ -1,0 +1,9 @@
+pytest
+pytest-cov
+numpy
+pandas
+numpy
+matplotlib
+jupyter
+deap
+scikit-learn
