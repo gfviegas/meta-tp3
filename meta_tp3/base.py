@@ -7,6 +7,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
 from meta_tp3.datasource import get_dataframe
 
+# PARAMETROS DO BENCHMARK
 POP_SIZE = 200
 TOURN_SIZE = 50
 CROSSOVER_RATE = 0.9
@@ -15,7 +16,10 @@ NUMBER_GEN = 20
 MAX_TREE_DEPTH_INITIAL = 6
 MAX_TREE_DEPTH_MUTATION = 15
 TEST_SIZE = 0.25
-SET_AND_TARGETS_TYPE = "TEST"
+
+# PARAMETROS GLOBAIS
+MAX_TREE_DEPTH_INITIAL = 6
+MAX_TREE_DEPTH_MUTATION = 15
 
 
 # Definição do conjunto de dados
@@ -134,15 +138,13 @@ toolbox = base.Toolbox()
 
 
 # Função de Avaliação - Retorna um valor de acurácia a partir da matriz de confusão
-def fitness_function(individual):
+def fitness_function(individual, domain_set="TRAINING"):
     # Transforma a expressão de árvore em uma função chamável
     predict_is_churn = toolbox.compile(expr=individual)
 
     # Seleciona o conjunto e alvos para cálculo de fitness
-    set_to_use = training_set if SET_AND_TARGETS_TYPE == "TRAINING" else test_set
-    targets_to_use = (
-        training_targets if SET_AND_TARGETS_TYPE == "TRAINING" else test_targets
-    )
+    set_to_use = test_set if domain_set == "TEST" else training_set
+    targets_to_use = test_targets if domain_set == "TEST" else training_targets
 
     # Faz as predições se os clientes do conjunto de treinamento é Churn ou não
     predictions = [predict_is_churn(*client) for client in set_to_use]
