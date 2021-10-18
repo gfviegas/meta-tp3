@@ -7,14 +7,15 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
 from meta_tp3.datasource import get_dataframe
 
-POP_SIZE = 100
-TOURN_SIZE = 10
+POP_SIZE = 200
+TOURN_SIZE = 50
 CROSSOVER_RATE = 0.9
 MUTATION_RATE = 0.05
-NUMBER_GEN = 500
+NUMBER_GEN = 20
 MAX_TREE_DEPTH_INITIAL = 6
 MAX_TREE_DEPTH_MUTATION = 15
 TEST_SIZE = 0.25
+SET_AND_TARGETS_TYPE = "TEST"
 
 
 # Definição do conjunto de dados
@@ -137,10 +138,16 @@ def fitness_function(individual):
     # Transforma a expressão de árvore em uma função chamável
     predict_is_churn = toolbox.compile(expr=individual)
 
-    # Faz as predições se os clientes do conjunto de treinamento é Churn ou não
-    predictions = [predict_is_churn(*client) for client in training_set]
+    # Seleciona o conjunto e alvos para cálculo de fitness
+    set_to_use = training_set if SET_AND_TARGETS_TYPE == "TRAINING" else test_set
+    targets_to_use = (
+        training_targets if SET_AND_TARGETS_TYPE == "TRAINING" else test_targets
+    )
 
-    tn, fp, fn, tp = confusion_matrix(predictions, training_targets).ravel()
+    # Faz as predições se os clientes do conjunto de treinamento é Churn ou não
+    predictions = [predict_is_churn(*client) for client in set_to_use]
+
+    tn, fp, fn, tp = confusion_matrix(predictions, targets_to_use).ravel()
 
     accuracy = (tp + tn) / (tp + tn + fp + fn)
 
@@ -175,8 +182,6 @@ toolbox.decorate(
 
 
 def main():
-    random.seed(10)
-
     pop = toolbox.population(n=POP_SIZE)
 
     hof = tools.HallOfFame(1)
