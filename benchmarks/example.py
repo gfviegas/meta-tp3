@@ -14,5 +14,6 @@ for i in range(NUMBER_OF_EXECUTIONS):
     best = hof.items[0]
     all_best_fitness.append(best.fitness.values[0])
 
+print(all_best_fitness)
 s = pd.Series(all_best_fitness)
 print(s.describe())

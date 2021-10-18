@@ -8,11 +8,11 @@ from sklearn.metrics import confusion_matrix
 from meta_tp3.datasource import get_dataframe
 
 # PARAMETROS DO BENCHMARK
-POP_SIZE = 200
-TOURN_SIZE = 50
+POP_SIZE = 100
+TOURN_SIZE = 10
 CROSSOVER_RATE = 0.9
 MUTATION_RATE = 0.05
-NUMBER_GEN = 20
+NUMBER_GEN = 10
 MAX_TREE_DEPTH_INITIAL = 6
 MAX_TREE_DEPTH_MUTATION = 15
 TEST_SIZE = 0.25
@@ -138,7 +138,7 @@ toolbox = base.Toolbox()
 
 
 # Função de Avaliação - Retorna um valor de acurácia a partir da matriz de confusão
-def fitness_function(individual, domain_set="TRAINING"):
+def fitness_function(individual, domain_set="TEST"):
     # Transforma a expressão de árvore em uma função chamável
     predict_is_churn = toolbox.compile(expr=individual)
 
